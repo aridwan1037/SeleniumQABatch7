@@ -23,8 +23,11 @@ async function sauceDemoLoginTest(){
         assert.strictEqual(await menuButton.isDisplayed(), true, "Menu Button is not visible")
 
         // Add item to cart
+        await driver.findElement(By.xpath(("//button[@id='add-to-cart-sauce-labs-backpack']"))).click();
 
         // Validate item sukses ditambahkan ke cart
+        let shoppingCart = await driver.findElement(By.xpath("//span[@class='shopping_cart_badge']"))
+        assert.strictEqual(await shoppingCart.isDisplayed(), true, "Shopping Cart Badge is not exist")
 
     } finally{
         await driver.quit();
