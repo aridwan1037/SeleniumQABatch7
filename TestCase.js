@@ -2,6 +2,12 @@ const { Builder } = require("selenium-webdriver");
 const LoginPage = require("./WebComponent/loginPage");
 const DashboardPage = require("./WebComponent/DashboardPage");
 const assert = require("assert");
+const fs = require('fs')
+const screenshotsDir ='./screenshots/';
+
+if (!fs.existsSync (screenshotsDir)){
+    fs.mkdirSync(screenshotsDir, {recursive:true});
+}
 
 describe('TestCase 1', function () {
   this.timeout(40000);
@@ -26,9 +32,16 @@ describe('TestCase 1', function () {
     assert.strictEqual(title, "Products","Expected Dashboard title to be products");
   });
 
+  afterEach(async function () {
+    const screenshoot = await driver.takeScreenshot()
+    const filepath = `${screenshotsDir}${this.currentTest.title.replace(/\s+/g, '_')}_${Date.now()}.png`; 
+    fs.writeFileSync(filepath, screenshoot, 'base64');
+  })
+
   after(async function () {
     await driver.quit();
   });
+
 });
 
 
