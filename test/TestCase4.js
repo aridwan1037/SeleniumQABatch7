@@ -2,6 +2,7 @@ const { Builder } = require("selenium-webdriver");
 const LoginPage = require("../WebComponent/loginPage");
 const DashboardPage = require("../WebComponent/DashboardPage");
 const CartPage = require("../WebComponent/CartPage");
+const CheckoutPage = require("../WebComponent/CheckoutPage");
 const assert = require("assert");
 const fs = require('fs')
 const screenshotsDir ='./screenshots/';
@@ -11,12 +12,16 @@ const browser = process.env.BROWSER;
 const baseUrl = process.env.BASE_URL;
 const username = process.env.USER_NAME;
 const password = process.env.PASSWORD;
+const firstName = process.env.FIRSTNAME;
+const lastName = process.env.LASTNAME;
+const postalCode = process.env.POSTALCODE;
+
 
 if (!fs.existsSync (screenshotsDir)){
     fs.mkdirSync(screenshotsDir, {recursive:true});
 }
 
-describe('TestCase 3 [addToCart] #Regression', function () {
+describe('TestCase 4 [Checkout] #Regression', function () {
   this.timeout(40000);
   let driver;
 
@@ -42,7 +47,7 @@ describe('TestCase 3 [addToCart] #Regression', function () {
         break
       case 'chrome':
       default:
-        driver = await new Builder().forBrowser(browser).setChromeOptions(options).build();
+        driver = await new Builder().forBrowser(browser).setChromeOptions().build();
         break
     }
   });
@@ -55,7 +60,7 @@ describe('TestCase 3 [addToCart] #Regression', function () {
   });
 
   //assertion & validasi
-  it("Login and add item to cart success", async function () {
+  it("Checkout success", async function () {
     const dashboardPage = new DashboardPage(driver);
     const title = await dashboardPage.isOnDashboard();
     assert.strictEqual(title, "Products","Expected Dashboard title to be products");
@@ -65,6 +70,16 @@ describe('TestCase 3 [addToCart] #Regression', function () {
     const cartPage = new CartPage(driver);
     const isOnChart = await cartPage.isOnShoppingCart();
     assert.strictEqual(isOnChart, true, "Shopping Cart Badge is not exist");
+
+    await dashboardPage.openCart()
+    await cartPage.checkout()
+
+    const checkoutPage = new CheckoutPage(driver)
+    await checkoutPage.continue(firstName, lastName, postalCode)
+
+
+
+
 
   });
 
