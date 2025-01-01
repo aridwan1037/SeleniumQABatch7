@@ -3,6 +3,8 @@ const LoginPage = require("../WebComponent/loginPage");
 const DashboardPage = require("../WebComponent/DashboardPage");
 const CartPage = require("../WebComponent/CartPage");
 const CheckoutPage = require("../WebComponent/CheckoutPage");
+const CheckoutOverviewPage = require('../WebComponent/CheckoutOverviewPage')
+const CheckoutCompletePage = require('../WebComponent/CheckoutCompletePage')
 const assert = require("assert");
 const fs = require('fs')
 const screenshotsDir ='./screenshots/';
@@ -77,9 +79,17 @@ describe('TestCase 4 [Checkout] #Regression', function () {
     const checkoutPage = new CheckoutPage(driver)
     await checkoutPage.continue(firstName, lastName, postalCode)
 
+    const checkOverviewPage = new CheckoutOverviewPage(driver);
+    const itemList = await checkOverviewPage.isOnCart();
+    assert.strictEqual(itemList, "Sauce Labs Backpack","Sauce Labs Backpack isn't listed on shopping vart");
+    await checkOverviewPage.finish()
 
-
-
+    const checkoutCompletePage = new CheckoutCompletePage(driver);
+    const isComplete = await checkoutCompletePage.isComplete();
+    const isOncompleteCheckout = await checkoutCompletePage.isOnCompleteCheckout();
+    assert.strictEqual(isComplete, "Thank you for your order!","Your order is not Complete");
+    assert.strictEqual(isOncompleteCheckout, "Checkout: Complete!","You are not in Checkout : Complete Page");
+    
 
   });
 

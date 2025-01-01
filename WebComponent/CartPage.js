@@ -1,5 +1,4 @@
 const { By } = require("selenium-webdriver");
-const assert = require("assert");
 
 class CartPage {
   constructor(driver) {
