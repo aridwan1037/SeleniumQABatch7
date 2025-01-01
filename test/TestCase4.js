@@ -49,7 +49,7 @@ describe('TestCase 4 [Checkout] #Regression', function () {
         break
       case 'chrome':
       default:
-        driver = await new Builder().forBrowser(browser).setChromeOptions().build();
+        driver = await new Builder().forBrowser(browser).setChromeOptions(options).build();
         break
     }
   });
